@@ -1,75 +1,68 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import SearchForm from "../SearchForm/SearchForm";
 import ResultList from "../ResultList/ResultList";
 import API from "../../utils/API";
 import Header from "../Header/Header";
 import TableHeaders from "../TableHeaders/TableHeaders";
-import Wrapper from '../Wrapper/index'
-import Container from '../Container/index'
-import Row from '../Row/index'
-import Col from '../Col/index'
+import Wrapper from "../Wrapper/index";
+import Container from "../Container/index";
+import Row from "../Row/index";
+import Col from "../Col/index";
 
-class SearchResultContainer extends Component {
-  state = {
-  allUsers:[],
-  filteredUsers:[],
-  searchTerm: ""
-  };
-
+function SearchResultContainer() {
+  const [allUsers, setAllUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   // When this component mounts, search the Giphy API for pictures of kittens
-  componentDidMount() {
-    this.searchGiphy();
-  }
- 
-  searchGiphy = () => {
+
+  useEffect(() => {
+    searchAllUsers();
+  }, [filteredUsers]);
+
+  const searchAllUsers = () => {
     API.getUsers()
-      .then((res) => this.setState({ allUsers: res.data.results}))
+      .then((res) => setAllUsers({ allUsers: res.data.results }))
       .catch((err) => console.log(err));
   };
 
-  handleInputChange = (event) => {
-    let value = event.target.value;
-    const name = event.target.name;
-
-    // Updating the input's state
-    this.setState({
-      [name]: value
-    });
-  };
-
-
-  // When the form is submitted, search the Giphy API for `this.state.search`
-  handleFormSubmit = (event) => {
-    event.preventDefault();
-    this.searchGiphy();
  
-    
-  };
+  const handleInputChange = (event) => {
+    const {value } = event.target;
+ 
+  const filteredEmployees = allUsers.allUsers
+    .filter(employee => employee.name.first.toLowerCase()
+    .indexOf(value.toLowerCase()) > -1
+  )
 
-  render() { 
 
-    console.log(this.state + "<<<<<<<SearchResultsContainer") ;
-    return (
- <Wrapper>
-       <div>
-           <Header/>
-            <SearchForm 
-              // handleFormSubmit={this.handleFormSubmit}
-              searchTerm = {this.state.searchTerm}
-              handleInputChange={this.handleInputChange}
-            />
-                <Container style={{ marginTop: 30 }}>
-                  <Row>
-                      <Col size="md-12">
-                          <TableHeaders results={this.state.allUsers}/>
-                     </Col>
-                  </Row>
-                 </Container> 
-            <ResultList results={this.state.allUsers} />
-            </div>
-            </Wrapper>
-    );
-  }
+
+  console.log(filteredEmployees);
+  console.log("----<M<>>>><___");
+  setFilteredUsers({filteredUsers : filteredEmployees})
+  setSearchTerm(event.target.value)
 }
- 
+
+  return (
+    <Wrapper>
+      <div>
+        <Header />
+        <SearchForm
+          name={searchTerm}
+          handleInputChange={handleInputChange}
+        />
+        <Container style={{ marginTop: 30 }}>
+          <Row>
+            <Col size="md-12">
+              <TableHeaders />
+                  {/* {console.log(allUsers.allUsers.length)} */}
+            </Col>
+          </Row>
+        </Container>
+        <ResultList allUsers={allUsers.allUsers} />
+    
+      </div>
+    </Wrapper>
+  );
+}
+
 export default SearchResultContainer;

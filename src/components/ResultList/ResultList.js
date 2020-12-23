@@ -3,30 +3,30 @@ import Row from "../Row";
 import Col from "../Col";
 
 function ResultList(props) {
-  console.log(props);
+  console.log(props.allUsers);
   return (
     <ul className="list-group">
-      {props.results.map((result, index) => (
+      {props.allUsers.map((user, index) => (
         <li className="list-group-item" key={index}>
           <Row>
             <Col size="md-4">
               <img
-                alt={result.name.first}
+                alt={user.name.first}
                 className="img-fluid"
-                src={result.picture.large}
+                src={user.picture.large}
               />
             </Col>
 
             <Col size="md-2">
-              <p>{result.name.first}</p>
+              <p>{user.name.first}</p>
             </Col>
 
             <Col size="md-2">
-              <p>{result.phone}</p>
+              <p>{user.phone}</p>
             </Col>
 
             <Col size="md-0">
-              <p>{result.email}</p>
+              <p>{user.email}</p>
             </Col>
           </Row>
         </li>
