@@ -11,6 +11,7 @@ import Col from '../Col/index'
 
 class SearchResultContainer extends Component {
   state = {
+
   allUsers:[],
   filteredUsers:[],
   searchTerm: ""
